@@ -8,16 +8,24 @@
 import SwiftUI
 
 @main
-struct BlackHairCareApp:App {
+struct BlackHairCareApp: App {
+    @AppStorage("hasCompletedOnboarding") private var hasCompletedOnboarding: Bool = false
+    
     init() {
+        // Your existing initialization code here
     }
-
+    
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            if hasCompletedOnboarding {
+                ContentView()
+            } else {
+                OnboardingView()
+                    .onDisappear {
+                        // Mark onboarding as completed when user proceeds to main app
+                        hasCompletedOnboarding = true
+                    }
+            }
         }
     }
 }
-
-
-

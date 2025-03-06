@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		2382CD002D71BC2300A50C4D /* WebRTC in Frameworks */ = {isa = PBXBuildFile; productRef = 2382CCFF2D71BC2300A50C4D /* WebRTC */; };
+		23CE38362D79595A000AD77C /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23CE38352D79595A000AD77C /* OnboardingView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -28,6 +29,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		23CE38352D79595A000AD77C /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
 		23F1E12C2D6EBA7900AE4509 /* Black Hair Care app.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Black Hair Care app.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		23F1E13C2D6EBA7A00AE4509 /* Black Hair Care appTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Black Hair Care appTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		23F1E1462D6EBA7A00AE4509 /* Black Hair Care appUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Black Hair Care appUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -80,6 +82,7 @@
 		23F1E1232D6EBA7900AE4509 = {
 			isa = PBXGroup;
 			children = (
+				23CE38352D79595A000AD77C /* OnboardingView.swift */,
 				23F1E12E2D6EBA7900AE4509 /* Black Hair Care app */,
 				23F1E13F2D6EBA7A00AE4509 /* Black Hair Care appTests */,
 				23F1E1492D6EBA7A00AE4509 /* Black Hair Care appUITests */,
@@ -238,6 +241,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				23CE38362D79595A000AD77C /* OnboardingView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

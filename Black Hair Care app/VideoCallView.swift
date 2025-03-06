@@ -38,4 +38,8 @@ struct VideoCallView: View {
         }
         .padding()
     }
+    
+}
+#Preview {
+    
 }
