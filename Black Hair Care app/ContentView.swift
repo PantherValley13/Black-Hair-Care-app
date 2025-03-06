@@ -5,6 +5,12 @@ struct ContentView: View {
     @State private var isRefreshing = false // State to track refresh status
     @State private var selectedTab = 0 // State to track the selected tab
 
+    // State for badge counts
+    @State private var homeBadgeCount: Int? = nil
+    @State private var scheduleBadgeCount: Int? = 3 // Example badge count for Schedule tab
+    @State private var profileBadgeCount: Int? = 1 // Example badge count for Profile tab
+    @State private var settingsBadgeCount: Int? = nil
+
     var body: some View {
         TabView(selection: $selectedTab) {
             // Home Tab
@@ -91,7 +97,17 @@ struct ContentView: View {
                 Image(systemName: "house.fill")
                 Text("Home")
             }
+            .badge(homeBadgeCount ?? 0) // Add badge to Home tab
             .tag(0)
+
+            // Schedule Tab
+            FindStylistView()
+                .tabItem {
+                    Image(systemName: "calendar")
+                    Text("Schedule")
+                }
+                .badge(scheduleBadgeCount ?? 0) // Add badge to Schedule tab
+                .tag(3)
 
             // Profile Tab
             UserProfileView()
@@ -99,7 +115,10 @@ struct ContentView: View {
                     Image(systemName: "person.fill")
                     Text("Profile")
                 }
+               
                 .tag(1)
+            
+            
 
             // Settings Tab
             SettingsView()
@@ -107,8 +126,10 @@ struct ContentView: View {
                     Image(systemName: "gear")
                     Text("Settings")
                 }
+                .badge(settingsBadgeCount ?? 0) // Add badge to Settings tab
                 .tag(2)
         }
+       
     }
 
     // Function to simulate refreshing data
