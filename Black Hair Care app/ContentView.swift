@@ -3,86 +3,111 @@ import AVKit // Import AVKit for video playback
 
 struct ContentView: View {
     @State private var isRefreshing = false // State to track refresh status
+    @State private var selectedTab = 0 // State to track the selected tab
 
     var body: some View {
-        NavigationView {
-            ScrollView {
-                VStack(spacing: 24) {
-                    // MARK: - Hero Section
-                    HeroSection()
-                    
-                    // MARK: - Hair Type Assessment
-                    HairTypeAssessmentSection()
-                    
-                    // MARK: - Product Recommendations
-                    ProductRecommendationsSection()
-                    
-                    // MARK: - Tutorial Library
-                    TutorialLibrarySection()
-                    
-                    // MARK: - Community Feed
-                    CommunityFeedSection()
-                    
-                    // MARK: - Navigation Links to Other Screens
-                    VStack(spacing: 12) {
-                        NavigationLink(destination: ProductDetailView()) {
-                            Text("Go to Product Detail")
-                                .font(.system(size: 16, weight: .medium))
-                                .frame(maxWidth: .infinity, minHeight: 48)
-                                .background(Color.theme.primary)
-                                .foregroundColor(.white)
-                                .cornerRadius(12)
-                        }
+        TabView(selection: $selectedTab) {
+            // Home Tab
+            NavigationView {
+                ScrollView {
+                    VStack(spacing: 24) {
+                        // MARK: - Hero Section
+                        HeroSection()
                         
-                        NavigationLink(destination: TutorialDetailView()) {
-                            Text("Go to Tutorial Detail")
-                                .font(.system(size: 16, weight: .medium))
-                                .frame(maxWidth: .infinity, minHeight: 48)
-                                .background(Color.theme.secondary)
-                                .foregroundColor(.white)
-                                .cornerRadius(12)
-                        }
+                        // MARK: - Hair Type Assessment
+                        HairTypeAssessmentSection()
                         
-                        NavigationLink(destination: CommunityPostDetailView()) {
-                            Text("Go to Community Post Detail")
-                                .font(.system(size: 16, weight: .medium))
-                                .frame(maxWidth: .infinity, minHeight: 48)
-                                .background(Color.theme.accent)
-                                .foregroundColor(.white)
-                                .cornerRadius(12)
-                        }
+                        // MARK: - Product Recommendations
+                        ProductRecommendationsSection()
                         
-                        NavigationLink(destination: UserProfileView()) {
-                            Text("Go to User Profile")
-                                .font(.system(size: 16, weight: .medium))
-                                .frame(maxWidth: .infinity, minHeight: 48)
-                                .background(Color.theme.tertiary)
-                                .foregroundColor(.white)
-                                .cornerRadius(12)
-                        }
+                        // MARK: - Tutorial Library
+                        TutorialLibrarySection()
                         
-                        // MARK: - Hair Analysis Link
-                        NavigationLink(destination: HairAnalysisView()) {
-                            Text("Go to Hair Analysis")
-                                .font(.system(size: 16, weight: .medium))
-                                .frame(maxWidth: .infinity, minHeight: 48)
-                                .background(Color.theme.highlight)
-                                .foregroundColor(.white)
-                                .cornerRadius(12)
+                        // MARK: - Community Feed
+                        CommunityFeedSection()
+                        
+                        // MARK: - Navigation Links to Other Screens
+                        VStack(spacing: 12) {
+                            NavigationLink(destination: ProductDetailView()) {
+                                Text("Go to Product Detail")
+                                    .font(.system(size: 16, weight: .medium))
+                                    .frame(maxWidth: .infinity, minHeight: 48)
+                                    .background(Color.theme.primary)
+                                    .foregroundColor(.white)
+                                    .cornerRadius(12)
+                            }
+                            
+                            NavigationLink(destination: TutorialDetailView()) {
+                                Text("Go to Tutorial Detail")
+                                    .font(.system(size: 16, weight: .medium))
+                                    .frame(maxWidth: .infinity, minHeight: 48)
+                                    .background(Color.theme.secondary)
+                                    .foregroundColor(.white)
+                                    .cornerRadius(12)
+                            }
+                            
+                            NavigationLink(destination: CommunityPostDetailView()) {
+                                Text("Go to Community Post Detail")
+                                    .font(.system(size: 16, weight: .medium))
+                                    .frame(maxWidth: .infinity, minHeight: 48)
+                                    .background(Color.theme.accent)
+                                    .foregroundColor(.white)
+                                    .cornerRadius(12)
+                            }
+                            
+                            NavigationLink(destination: UserProfileView()) {
+                                Text("Go to User Profile")
+                                    .font(.system(size: 16, weight: .medium))
+                                    .frame(maxWidth: .infinity, minHeight: 48)
+                                    .background(Color.theme.tertiary)
+                                    .foregroundColor(.white)
+                                    .cornerRadius(12)
+                            }
+                            
+                            // MARK: - Hair Analysis Link
+                            NavigationLink(destination: HairAnalysisView()) {
+                                Text("Go to Hair Analysis")
+                                    .font(.system(size: 16, weight: .medium))
+                                    .frame(maxWidth: .infinity, minHeight: 48)
+                                    .background(Color.theme.highlight)
+                                    .foregroundColor(.white)
+                                    .cornerRadius(12)
+                            }
                         }
+                        .padding(.horizontal, 16)
                     }
-                    .padding(.horizontal, 16)
+                    .padding(.horizontal, 20)
+                    .padding(.vertical, 16)
                 }
-                .padding(.horizontal, 20)
-                .padding(.vertical, 16)
+                .refreshable {
+                    // Call the refresh function
+                    await refreshData()
+                }
+                .navigationTitle("Your Hair Journey")
+                .navigationBarTitleDisplayMode(.large)
+                .background(Color.theme.background)
             }
-            .refreshable {
-                // Call the refresh function
-                await refreshData()
+            .tabItem {
+                Image(systemName: "house.fill")
+                Text("Home")
             }
-            .navigationTitle("Your Hair Journey")
-            .navigationBarTitleDisplayMode(.large)
-            .background(Color.theme.background)
+            .tag(0)
+
+            // Profile Tab
+            UserProfileView()
+                .tabItem {
+                    Image(systemName: "person.fill")
+                    Text("Profile")
+                }
+                .tag(1)
+
+            // Settings Tab
+            SettingsView()
+                .tabItem {
+                    Image(systemName: "gear")
+                    Text("Settings")
+                }
+                .tag(2)
         }
     }
 
@@ -95,6 +120,9 @@ struct ContentView: View {
         print("Data refreshed!")
     }
 }
+
+// MARK: - Settings View (Example)
+
 
 // MARK: - Color Theme Extension
 extension Color {
@@ -178,8 +206,6 @@ struct ProductRecommendationsSection: View {
     }
 }
 
-
-
 struct ProductCard: View {
     @State private var isLiked: Bool = false
     
@@ -250,7 +276,6 @@ struct TutorialLibrarySection: View {
     }
 }
 
-
 struct TutorialCard: View {
     var videoURL: URL
     @State private var isLiked: Bool = false
@@ -290,6 +315,7 @@ struct TutorialCard: View {
         .buttonStyle(PlainButtonStyle()) // Ensures the entire card is tappable without styling issues
     }
 }
+
 // MARK: - Community Feed
 struct CommunityFeedSection: View {
     var body: some View {
