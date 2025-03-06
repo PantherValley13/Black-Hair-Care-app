@@ -6,90 +6,93 @@ struct CommunityPostCard: View {
     var commentCount: Int = 5 // Example comment count
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            HStack {
-                Image("image-5") // Use "image-5.png"
-                    .resizable()
-                    .scaledToFill()
-                    .frame(width: 40, height: 40)
-                    .clipShape(Circle())
+        NavigationLink(destination: CommunityPostDetailView()) {
+            VStack(alignment: .leading, spacing: 12) {
+                HStack {
+                    Image("image-5") // Use "image-5.png"
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: 40, height: 40)
+                        .clipShape(Circle())
+                    
+                    Text("Jessica")
+                        .font(.system(size: 16, weight: .medium))
+                        .foregroundColor(Color.theme.text)
+                    
+                    Spacer()
+                    
+                    Text("2h ago")
+                        .font(.system(size: 14))
+                        .foregroundColor(Color.theme.subText)
+                }
                 
-                Text("Jessica")
-                    .font(.system(size: 16, weight: .medium))
+                Text("Check out my new twist-out! Loving these products from the app.")
+                    .font(.system(size: 14))
                     .foregroundColor(Color.theme.text)
                 
-                Spacer()
+                Image("image-4") // Keep "image-4"
+                    .resizable()
+                    .scaledToFill()
+                    .frame(height: 160)
+                    .cornerRadius(12)
                 
-                Text("2h ago")
-                    .font(.system(size: 14))
-                    .foregroundColor(Color.theme.subText)
-            }
-            
-            Text("Check out my new twist-out! Loving these products from the app.")
-                .font(.system(size: 14))
-                .foregroundColor(Color.theme.text)
-            
-            Image("image-4") // Keep "image-4"
-                .resizable()
-                .scaledToFill()
-                .frame(height: 160)
-                .cornerRadius(12)
-            
-            HStack {
-                Button(action: {
-                    isLiked.toggle()
-                    print(isLiked ? "Liked" : "Unliked")
-                }) {
-                    HStack(spacing: 4) {
-                        Image(systemName: isLiked ? "heart.fill" : "heart")
-                        Text("Like")
-                    }
-                    .foregroundColor(isLiked ? Color.theme.secondary : Color.theme.subText)
-                }
-                
-                Spacer()
-                
-                // Comment Button with Badge
-                Button(action: {
-                    print("Commented on post")
-                }) {
-                    ZStack(alignment: .topTrailing) {
+                HStack {
+                    Button(action: {
+                        isLiked.toggle()
+                        print(isLiked ? "Liked" : "Unliked")
+                    }) {
                         HStack(spacing: 4) {
-                            Image(systemName: "bubble.right")
-                            Text("Comment")
+                            Image(systemName: isLiked ? "heart.fill" : "heart")
+                            Text("Like")
+                        }
+                        .foregroundColor(isLiked ? Color.theme.secondary : Color.theme.subText)
+                    }
+                    
+                    Spacer()
+                    
+                    // Comment Button with Badge
+                    Button(action: {
+                        print("Commented on post")
+                    }) {
+                        ZStack(alignment: .topTrailing) {
+                            HStack(spacing: 4) {
+                                Image(systemName: "bubble.right")
+                                Text("Comment")
+                            }
+                            .foregroundColor(Color.theme.subText)
+                            
+                            // Badge for Comment Count
+                            if commentCount > 0 {
+                                Text("\(commentCount)")
+                                    .font(.system(size: 10, weight: .bold))
+                                    .foregroundColor(.white)
+                                    .padding(4)
+                                    .background(Color.red)
+                                    .clipShape(Circle())
+                                    .offset(x: 10, y: -10) // Adjust badge position
+                            }
+                        }
+                    }
+                    
+                    Spacer()
+                    
+                    // Share Button
+                    Button(action: sharePost) {
+                        HStack(spacing: 4) {
+                            Image(systemName: "arrowshape.turn.up.right")
+                            Text("Share")
                         }
                         .foregroundColor(Color.theme.subText)
-                        
-                        // Badge for Comment Count
-                        if commentCount > 0 {
-                            Text("\(commentCount)")
-                                .font(.system(size: 10, weight: .bold))
-                                .foregroundColor(.white)
-                                .padding(4)
-                                .background(Color.red)
-                                .clipShape(Circle())
-                                .offset(x: 10, y: -10) // Adjust badge position
-                        }
                     }
                 }
-                
-                Spacer()
-                
-                // Share Button
-                Button(action: sharePost) {
-                    HStack(spacing: 4) {
-                        Image(systemName: "arrowshape.turn.up.right")
-                        Text("Share")
-                    }
-                    .foregroundColor(Color.theme.subText)
-                }
+                .font(.system(size: 14))
             }
-            .font(.system(size: 14))
+            .padding(16)
+            .background(Color.theme.cardBackground)
+            .cornerRadius(12)
+            .shadow(color: Color.black.opacity(0.05), radius: 4, x: 0, y: 2)
         }
-        .padding(16)
-        .background(Color.theme.cardBackground)
-        .cornerRadius(12)
-        .shadow(color: Color.black.opacity(0.05), radius: 4, x: 0, y: 2)
+        .buttonStyle(PlainButtonStyle())
     }
     
     // Share Post Function
@@ -111,3 +114,5 @@ struct CommunityPostCard: View {
 #Preview {
     CommunityPostCard()
 }
+
+
