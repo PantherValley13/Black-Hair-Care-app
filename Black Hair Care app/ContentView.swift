@@ -2,6 +2,8 @@ import SwiftUI
 import AVKit // Import AVKit for video playback
 
 struct ContentView: View {
+    @State private var isRefreshing = false // State to track refresh status
+
     var body: some View {
         NavigationView {
             ScrollView {
@@ -74,10 +76,23 @@ struct ContentView: View {
                 .padding(.horizontal, 20)
                 .padding(.vertical, 16)
             }
+            .refreshable {
+                // Call the refresh function
+                await refreshData()
+            }
             .navigationTitle("Your Hair Journey")
             .navigationBarTitleDisplayMode(.large)
             .background(Color.theme.background)
         }
+    }
+
+    // Function to simulate refreshing data
+    private func refreshData() async {
+        isRefreshing = true
+        // Simulate a network call or data refresh
+        try? await Task.sleep(nanoseconds: 2_000_000_000) // 2 seconds delay
+        isRefreshing = false
+        print("Data refreshed!")
     }
 }
 
@@ -143,82 +158,6 @@ struct HairTypeAssessmentSection: View {
     }
 }
 
-// MARK: - Hair Type Quiz View
-//struct HairTypeQuizView: View {
-//    @State private var currentQuestionIndex: Int = 0
-//    @State private var selectedAnswer: String? = nil
-//    @State private var quizResults: [String] = []
-//
-//    let questions = [
-//        "What is your hair texture?",
-//        "How often do you wash your hair?",
-//        "What is your primary hair concern?"
-//    ]
-//
-//    let answers = [
-//        ["4A", "4B", "4C", "3C"],
-//        ["Daily", "Weekly", "Bi-Weekly", "Monthly"],
-//        ["Dryness", "Breakage", "Frizz", "Scalp Issues"]
-//    ]
-//
-//    var body: some View {
-//        VStack(spacing: 20) {
-//            if currentQuestionIndex < questions.count {
-//                Text(questions[currentQuestionIndex])
-//                    .font(.system(size: 22, weight: .semibold))
-//                    .foregroundColor(Color.theme.text)
-//                    .multilineTextAlignment(.center)
-//                    .padding()
-//
-//                ForEach(answers[currentQuestionIndex], id: \.self) { answer in
-//                    Button(action: {
-//                        selectedAnswer = answer
-//                        print("Selected answer: \(answer)")
-//                    }) {
-//                        Text(answer)
-//                            .font(.system(size: 16, weight: .medium))
-//                            .frame(maxWidth: .infinity, minHeight: 48)
-//                            .background(selectedAnswer == answer ? Color.theme.primary : Color.gray.opacity(0.2))
-//                            .foregroundColor(selectedAnswer == answer ? .white : Color.theme.text)
-//                            .cornerRadius(12)
-//                    }
-//                }
-//
-//                Button(action: {
-//                    if let answer = selectedAnswer {
-//                        quizResults.append(answer)
-//                        selectedAnswer = nil
-//                        currentQuestionIndex += 1
-//                        print("Next question: \(currentQuestionIndex)")
-//                    }
-//                }) {
-//                    Text(currentQuestionIndex == questions.count - 1 ? "Finish" : "Next")
-//                        .font(.system(size: 16, weight: .medium))
-//                        .frame(maxWidth: .infinity, minHeight: 48)
-//                        .background(Color.theme.primary)
-//                        .foregroundColor(.white)
-//                        .cornerRadius(12)
-//                }
-//                .disabled(selectedAnswer == nil)
-//                .opacity(selectedAnswer == nil ? 0.6 : 1.0)
-//            } else {
-//                Text("Quiz Complete!")
-//                    .font(.system(size: 22, weight: .bold))
-//                    .foregroundColor(Color.theme.text)
-//
-//                Text("Your recommended hair type is: \(quizResults.joined(separator: ", "))")
-//                    .font(.system(size: 16))
-//                    .foregroundColor(Color.theme.subText)
-//                    .multilineTextAlignment(.center)
-//                    .padding()
-//            }
-//        }
-//        .padding()
-//        .background(Color.theme.background)
-//        .navigationTitle("Hair Type Quiz")
-//    }
-//}
-
 // MARK: - Product Recommendations
 struct ProductRecommendationsSection: View {
     var body: some View {
@@ -239,50 +178,55 @@ struct ProductRecommendationsSection: View {
     }
 }
 
+
+
 struct ProductCard: View {
     @State private var isLiked: Bool = false
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            Image("image") // Use "image.png"
-                .resizable()
-                .scaledToFill()
-                .frame(width: 160, height: 160)
-                .cornerRadius(12)
-            
-            Text("Shea Moisture Shampoo")
-                .font(.system(size: 16, weight: .medium))
-                .foregroundColor(Color.theme.text)
-            
-            Text("$12.99")
-                .font(.system(size: 14))
-                .foregroundColor(Color.theme.subText)
-            
-            HStack {
-                Button(action: {
-                    isLiked.toggle()
-                    print(isLiked ? "Liked" : "Unliked")
-                }) {
-                    Image(systemName: isLiked ? "heart.fill" : "heart")
-                        .foregroundColor(isLiked ? Color.theme.secondary : Color.theme.subText)
-                        .font(.system(size: 20))
-                }
+        NavigationLink(destination: ProductDetailView()) {
+            VStack(alignment: .leading, spacing: 8) {
+                Image("image") // Use "image.png"
+                    .resizable()
+                    .scaledToFill()
+                    .frame(width: 160, height: 160)
+                    .cornerRadius(12)
                 
-                Spacer()
+                Text("Shea Moisture Shampoo")
+                    .font(.system(size: 16, weight: .medium))
+                    .foregroundColor(Color.theme.text)
                 
-                Button(action: {
-                    print("Add to cart")
-                }) {
-                    Image(systemName: "cart.badge.plus")
-                        .foregroundColor(Color.theme.primary)
+                Text("$12.99")
+                    .font(.system(size: 14))
+                    .foregroundColor(Color.theme.subText)
+                
+                HStack {
+                    Button(action: {
+                        isLiked.toggle()
+                        print(isLiked ? "Liked" : "Unliked")
+                    }) {
+                        Image(systemName: isLiked ? "heart.fill" : "heart")
+                            .foregroundColor(isLiked ? Color.theme.secondary : Color.theme.subText)
+                            .font(.system(size: 20))
+                    }
+                    
+                    Spacer()
+                    
+                    Button(action: {
+                        print("Add to cart")
+                    }) {
+                        Image(systemName: "cart.badge.plus")
+                            .foregroundColor(Color.theme.primary)
+                    }
                 }
             }
+            .frame(width: 160)
+            .padding(12)
+            .background(Color.theme.cardBackground)
+            .cornerRadius(12)
+            .shadow(color: Color.black.opacity(0.05), radius: 4, x: 0, y: 2)
         }
-        .frame(width: 160)
-        .padding(12)
-        .background(Color.theme.cardBackground)
-        .cornerRadius(12)
-        .shadow(color: Color.black.opacity(0.05), radius: 4, x: 0, y: 2)
+        .buttonStyle(PlainButtonStyle()) // Ensures the entire card is tappable without styling issues
     }
 }
 
@@ -306,43 +250,46 @@ struct TutorialLibrarySection: View {
     }
 }
 
+
 struct TutorialCard: View {
     var videoURL: URL
     @State private var isLiked: Bool = false
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 0) {
-            VideoPlayer(player: AVPlayer(url: videoURL))
-                .frame(width: 180, height: 120)
-                .cornerRadius(12)
-            
-            HStack {
-                Text("Protective Styles")
-                    .font(.system(size: 14, weight: .medium))
-                    .foregroundColor(.white)
-                    .padding(8)
-                    .background(Color.black.opacity(0.5))
-                    .cornerRadius(8)
+        NavigationLink(destination: TutorialDetailView()) {
+            VStack(alignment: .leading, spacing: 0) {
+                VideoPlayer(player: AVPlayer(url: videoURL))
+                    .frame(width: 180, height: 120)
+                    .cornerRadius(12)
                 
-                Spacer()
-                
-                Button(action: {
-                    isLiked.toggle()
-                    print(isLiked ? "Liked" : "Unliked")
-                }) {
-                    Image(systemName: isLiked ? "heart.fill" : "heart")
-                        .foregroundColor(isLiked ? Color.theme.secondary : .white)
-                        .font(.system(size: 20))
+                HStack {
+                    Text("Protective Styles")
+                        .font(.system(size: 14, weight: .medium))
+                        .foregroundColor(.white)
+                        .padding(8)
+                        .background(Color.black.opacity(0.5))
+                        .cornerRadius(8)
+                    
+                    Spacer()
+                    
+                    Button(action: {
+                        isLiked.toggle()
+                        print(isLiked ? "Liked" : "Unliked")
+                    }) {
+                        Image(systemName: isLiked ? "heart.fill" : "heart")
+                            .foregroundColor(isLiked ? Color.theme.secondary : .white)
+                            .font(.system(size: 20))
+                    }
                 }
+                .padding(8)
             }
-            .padding(8)
+            .background(Color.theme.cardBackground)
+            .cornerRadius(12)
+            .shadow(color: Color.black.opacity(0.05), radius: 4, x: 0, y: 2)
         }
-        .background(Color.theme.cardBackground)
-        .cornerRadius(12)
-        .shadow(color: Color.black.opacity(0.05), radius: 4, x: 0, y: 2)
+        .buttonStyle(PlainButtonStyle()) // Ensures the entire card is tappable without styling issues
     }
 }
-
 // MARK: - Community Feed
 struct CommunityFeedSection: View {
     var body: some View {
@@ -359,98 +306,7 @@ struct CommunityFeedSection: View {
     }
 }
 
-
-// MARK: - Product Detail View
-//struct ProductDetailView: View {
-//    var body: some View {
-//        ScrollView {
-//            VStack(alignment: .leading, spacing: 16) {
-//                Image("image-3") // Keep "image-3"
-//                    .resizable()
-//                    .scaledToFill()
-//                    .frame(height: 300)
-//                    .clipped()
-//
-//                VStack(alignment: .leading, spacing: 12) {
-//                    Text("Shea Moisture Shampoo")
-//                        .font(.system(size: 24, weight: .bold))
-//                        .foregroundColor(Color.theme.text)
-//
-//                    Text("$12.99")
-//                        .font(.system(size: 20, weight: .medium))
-//                        .foregroundColor(Color.theme.subText)
-//
-//                    Text("A nourishing shampoo designed for natural hair. Infused with shea butter, coconut oil, and peppermint to cleanse and moisturize.")
-//                        .font(.system(size: 16))
-//                        .foregroundColor(Color.theme.text)
-//                        .padding(.vertical, 8)
-//
-//                    HStack {
-//                        Image(systemName: "star.fill")
-//                            .foregroundColor(.yellow)
-//                        Text("4.8 (1.2k reviews)")
-//                            .font(.system(size: 14))
-//                            .foregroundColor(Color.theme.subText)
-//                    }
-//
-//                    VStack(spacing: 12) {
-//                        Button(action: {
-//                            print("Added to cart")
-//                        }) {
-//                            Text("Add to Cart")
-//                                .font(.system(size: 18, weight: .medium))
-//                                .frame(maxWidth: .infinity, minHeight: 50)
-//                                .background(Color.theme.primary)
-//                                .foregroundColor(.white)
-//                                .cornerRadius(12)
-//                        }
-//
-//                        Button(action: {
-//                            print("Buy now")
-//                        }) {
-//                            Text("Buy Now")
-//                                .font(.system(size: 18, weight: .medium))
-//                                .frame(maxWidth: .infinity, minHeight: 50)
-//                                .background(Color.theme.accent)
-//                                .foregroundColor(.white)
-//                                .cornerRadius(12)
-//                        }
-//                    }
-//                    .padding(.top, 8)
-//                }
-//                .padding(.horizontal, 16)
-//            }
-//            .padding(.vertical, 16)
-//        }
-//        .background(Color.theme.background)
-//        .navigationTitle("Product Details")
-//    }
-//}
-
-// Placeholder view stubs for navigation links
-//struct TutorialDetailView: View {
-//    var body: some View {
-//        Text("Tutorial Detail View")
-//    }
-//}
-//
-//struct CommunityPostDetailView: View {
-//    var body: some View {
-//        Text("Community Post Detail View")
-//    }
-//}
-//
-//struct UserProfileView: View {
-//    var body: some View {
-//        Text("User Profile View")
-//    }
-//}
-//
-//struct HairAnalysisView: View {
-//    var body: some View {
-//        Text("Hair Analysis View")
-//    }
-//}
+// MARK: - Preview
 
 #Preview {
     ContentView()

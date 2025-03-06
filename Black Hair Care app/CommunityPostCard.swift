@@ -3,7 +3,8 @@ import UIKit
 
 struct CommunityPostCard: View {
     @State private var isLiked: Bool = false
-    
+    var commentCount: Int = 5 // Example comment count
+
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             HStack {
@@ -48,19 +49,33 @@ struct CommunityPostCard: View {
                 
                 Spacer()
                 
+                // Comment Button with Badge
                 Button(action: {
                     print("Commented on post")
                 }) {
-                    HStack(spacing: 4) {
-                        Image(systemName: "bubble.right")
-                        Text("Comment")
+                    ZStack(alignment: .topTrailing) {
+                        HStack(spacing: 4) {
+                            Image(systemName: "bubble.right")
+                            Text("Comment")
+                        }
+                        .foregroundColor(Color.theme.subText)
+                        
+                        // Badge for Comment Count
+                        if commentCount > 0 {
+                            Text("\(commentCount)")
+                                .font(.system(size: 10, weight: .bold))
+                                .foregroundColor(.white)
+                                .padding(4)
+                                .background(Color.red)
+                                .clipShape(Circle())
+                                .offset(x: 10, y: -10) // Adjust badge position
+                        }
                     }
-                    .foregroundColor(Color.theme.subText)
                 }
                 
                 Spacer()
                 
-                // Replace the existing Share button with a share action
+                // Share Button
                 Button(action: sharePost) {
                     HStack(spacing: 4) {
                         Image(systemName: "arrowshape.turn.up.right")
@@ -92,5 +107,7 @@ struct CommunityPostCard: View {
         }
     }
 }
+
 #Preview {
+    CommunityPostCard()
 }
